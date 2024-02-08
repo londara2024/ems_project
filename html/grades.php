@@ -1,3 +1,13 @@
+<?php
+  session_start();
+
+  if (isset($_SESSION['role']) && $_SESSION['role'] == "Admin") {
+
+    include "connection/connection_db.php";
+    include 'data/grades.php';
+    $ojbClass = getAllGrades($conn);
+?>
+
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -316,230 +326,69 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms/</span> Vertical Layouts</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Grade/</span> Grade Information</h4>
 
               <div class="row">
                 <div class="col-xl">
                   <div class="card mb-4">
-                    <h5 class="card-header">Light Table head</h5>
+                    <h5 class="card-header">Grade Table</h5>
                     <div class="table-responsive text-nowrap">
                       <table class="table">
                         <thead class="table-light">
                           <tr>
                             <th>Project</th>
-                            <th>Client</th>
-                            <th>Users</th>
                             <th>Status</th>
                             <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                          <tr>
-                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-                            <td>Albert Cook</td>
-                            <td>
-                              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Lilian Fuller"
-                                >
-                                  <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Sophia Wilkerson"
-                                >
-                                  <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Christina Parker"
-                                >
-                                  <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                              </ul>
-                            </td>
-                            <td><span class="badge bg-label-primary me-1">Active</span></td>
-                            <td>
-                              <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                  <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                  >
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-trash me-1"></i> Delete</a
-                                  >
+
+                          <?php
+                              $i = 0;
+                              if ($ojbClass != null) {
+                                foreach ($ojbClass as $grade) {
+                                  $grade_id   = $grade['grade_id'];
+                                  $grade_name = $grade['grade_name'];
+                                  $status     = $grade['status'];
+                          ?>
+
+                            <tr>
+                              <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><?=strtoupper($grade['grade_name'])?></strong></td>
+                              
+                              <?php
+                                if ($grade['status'] == 1) {
+                                  echo '<td><span class="badge bg-label-primary me-1">Active</span></td>';
+                                } else {
+                                  echo '<td><span class="badge bg-label-warning me-1">Pending</span></td>';
+                                }
+                              ?>
+                              
+                              <td>
+                                <div class="dropdown">
+                                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                  </button>
+                                  <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="javascript:void(0);"
+                                      data-bs-toggle="modal" data-bs-target="#modalCenter"
+                                      data-id = "<?=$grade_id?>" data-status = "<?=$status?>"
+                                      data-name = "<?=$grade_name?>"
+                                      onclick="fn_update(this)"
+                                      ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                    >
+                                    <a class="dropdown-item" href="javascript:void(0);"
+                                      ><i class="bx bx-trash me-1"></i> Delete</a
+                                    >
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>React Project</strong></td>
-                            <td>Barry Hunter</td>
-                            <td>
-                              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Lilian Fuller"
-                                >
-                                  <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Sophia Wilkerson"
-                                >
-                                  <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Christina Parker"
-                                >
-                                  <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                              </ul>
-                            </td>
-                            <td><span class="badge bg-label-success me-1">Completed</span></td>
-                            <td>
-                              <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                  <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                  >
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-trash me-1"></i> Delete</a
-                                  >
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><i class="fab fa-vuejs fa-lg text-success me-3"></i> <strong>VueJs Project</strong></td>
-                            <td>Trevor Baker</td>
-                            <td>
-                              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Lilian Fuller"
-                                >
-                                  <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Sophia Wilkerson"
-                                >
-                                  <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Christina Parker"
-                                >
-                                  <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                              </ul>
-                            </td>
-                            <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-                            <td>
-                              <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                  <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                  >
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-trash me-1"></i> Delete</a
-                                  >
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <i class="fab fa-bootstrap fa-lg text-primary me-3"></i> <strong>Bootstrap Project</strong>
-                            </td>
-                            <td>Jerry Milton</td>
-                            <td>
-                              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Lilian Fuller"
-                                >
-                                  <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Sophia Wilkerson"
-                                >
-                                  <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Christina Parker"
-                                >
-                                  <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                              </ul>
-                            </td>
-                            <td><span class="badge bg-label-warning me-1">Pending</span></td>
-                            <td>
-                              <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                  <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                  >
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-trash me-1"></i> Delete</a
-                                  >
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
+                              </td>
+                            </tr>
+
+                          <?php     
+                              }
+                            }
+                          ?>
+
                         </tbody>
                       </table>
                     </div>
@@ -562,12 +411,76 @@
     <!-- / Layout wrapper -->
 
     <div class="buy-now">
-      <a
-        href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
-        target="_blank"
-        class="btn btn-danger btn-buy-now"
-        >Upgrade to Pro</a
-      >
+        <button
+          type="button"
+          class="btn btn-danger btn-buy-now"
+          data-bs-toggle="modal"
+          data-bs-target="#modalCenter"
+          id="add_grade"
+          >Adding Grade</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCenterTitle">Grade</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form id="formClass" action="req/grades.php" method="POST">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col mb-3">
+                  <label for="nameWithTitle" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    id="nameWithTitle"
+                    class="form-control"
+                    placeholder="Enter Name"
+                    name="grade_name"
+                  />
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-0">
+                  <label for="emailWithTitle" class="form-label">Status</label>
+                  <input
+                    type="text"
+                    id="emailWithTitle"
+                    class="form-control"
+                    placeholder="1. Active, 2. Unactive"
+                    name="grade_status"
+                  />
+                </div>
+              </div>
+              <div class="row g-2" id="updateId" style="display:none;">
+                <div class="col mb-0">
+                  <label for="emailWithTitle" class="form-label">ID</label>
+                  <input
+                    type="text"
+                    id="IDWithTitle"
+                    class="form-control"
+                    placeholder="Enter ID"
+                    name="grade_id"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="btnSClose" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <!-- Core JS -->
@@ -585,9 +498,20 @@
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
 
+    <!-- Classes JS -->
+    <script src="js/grades.js"></script>
+
+
     <!-- Page JS -->
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 </html>
+
+<?php
+  } else {
+    header("Location: ../html/auth-login-basic.php");
+    exit;
+  }
+?>

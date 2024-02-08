@@ -1,13 +1,3 @@
-<?php
-  session_start();
-
-  if (isset($_SESSION['role']) && $_SESSION['role'] == "Admin") {
-
-    include "connection/connection_db.php";
-    include 'data/classes.php';
-    $ojbClass = getAllClasses($conn);
-?>
-
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -156,7 +146,7 @@
               </a>
             </li>
 
-            <li class="menu-item">
+            <li class="menu-item active">
               <a href="students.php" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user-circle"></i>
                 <div data-i18n="Boxicons">Student</div>
@@ -170,7 +160,7 @@
               </a>
             </li>
 
-            <li class="menu-item active">
+            <li class="menu-item">
               <a href="classes.php" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-buildings"></i>
                 <div data-i18n="Boxicons">Class</div>
@@ -326,68 +316,95 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Class/</span> Class Information</h4>
-
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Student/</span>Student Information/Adding</h4>
+              <h5 class="fw-bold py-1 mb-4"> 
+                <a href="students.php" class="btn btn-danger">
+                  <span class="tf-icons bx bx-arrow-back"></span>Back
+                </a>
+              </h5>
+              <!-- Basic Layout -->
               <div class="row">
                 <div class="col-xl">
                   <div class="card mb-4">
-                    <h5 class="card-header">Class Table head</h5>
+                    <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Recipient's username"
+                          aria-label="Recipient's username"
+                          aria-describedby="button-addon2"
+                        />
+                        <button class="btn btn-outline-primary" type="button" id="button-addon2">Search</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl">
+                  <div class="card mb-4">
+                    <h5 class="card-header">Light Table head</h5>
                     <div class="table-responsive text-nowrap">
-                      <table class="table" id="myTable">
+                      <table class="table">
                         <thead class="table-light">
                           <tr>
-                            <th>Project</th>
+                            <th>Class</th>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                            <th>Student</th>
                             <th>Status</th>
                             <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-
-                         <?php
-                            $i = 0;
-                            if ($ojbClass != null) {
-                              foreach ($ojbClass as $classes) {
-                                $class_id   = $classes['class_id'];
-                                $class_name = $classes['class_name'];
-                                $status     = $classes['status'];
-                         ?>
-                         
                           <tr>
-                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i><strong><?=strtoupper($class_name)?></strong></td>
-                            <?php
-                                if ($classes['status'] == 1) {
-                                  echo '<td><span class="badge bg-label-primary me-1">Active</span></td>';
-                                } else {
-                                  echo '<td><span class="badge bg-label-warning me-1">Pending</span></td>';
-                                }
-                              ?>
+                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
+                            <td>Albert Cook</td>
+                            <td>Albert Cook</td>
+                            <td>
+                              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                <li
+                                  data-bs-toggle="tooltip"
+                                  data-popup="tooltip-custom"
+                                  data-bs-placement="top"
+                                  class="avatar avatar-xs pull-up"
+                                  title="Lilian Fuller"
+                                >
+                                  <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
+                                </li>
+                                <li
+                                  data-bs-toggle="tooltip"
+                                  data-popup="tooltip-custom"
+                                  data-bs-placement="top"
+                                  class="avatar avatar-xs pull-up"
+                                  title="Sophia Wilkerson"
+                                >
+                                  <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
+                                </li>
+                                <li
+                                  data-bs-toggle="tooltip"
+                                  data-popup="tooltip-custom"
+                                  data-bs-placement="top"
+                                  class="avatar avatar-xs pull-up"
+                                  title="Christina Parker"
+                                >
+                                  <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
+                                </li>
+                              </ul>
+                            </td>
+                            <td><span class="badge bg-label-primary me-1">Active</span></td>
                             <td>
                               <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                   <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                  
                                   <a class="dropdown-item" href="javascript:void(0);"
-                                    data-bs-toggle="modal" data-bs-target="#modalCenter"
-                                    data-id = "<?=$class_id?>" data-status = "<?=$status?>"
-                                    data-name = "<?=$class_name?>"
-                                    onclick="fn_update(this)"
-                                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                  >
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-trash me-1"></i> Delete</a
+                                    ><i class="bx bx-edit-alt me-1"></i>Adding</a
                                   >
                                 </div>
                               </div>
                             </td>
                           </tr>
-
-                          <?php     
-                              }
-                            }
-                          ?>
-
                         </tbody>
                       </table>
                     </div>
@@ -403,81 +420,6 @@
         </div>
         <!-- / Layout page -->
       </div>
-
-      <div class="buy-now">
-        <button
-          type="button"
-          id="add_class"
-          class="btn btn-danger btn-buy-now"
-          data-bs-toggle="modal"
-          data-bs-target="#modalCenter"
-          >Adding Class</button>
-      </div>
-
-       <!-- Modal -->
-       <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <form id="formClass" action="req/classes.php" method="POST">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="modalCenterTitle" name="modal_title">Class</h5>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                    id="btnClose"
-                  ></button>
-                </div>
-              
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Name</label>
-                      <input
-                        type="text"
-                        id="nameWithTitle"
-                        class="form-control"
-                        placeholder="Enter Name"
-                        name="class_name"
-                      />
-                    </div>
-                  </div>
-                  <div class="row g-2">
-                    <div class="col mb-0">
-                      <label for="emailWithTitle" class="form-label">Status</label>
-                      <input
-                        type="text"
-                        id="emailWithTitle"
-                        class="form-control"
-                        placeholder="1. Active, 2. Unactive"
-                        name="class_status"
-                      />
-                    </div>
-                  </div>
-                  <div class="row g-2" id="updateId" style="display:none;">
-                    <div class="col mb-0">
-                      <label for="IDWithTitle" class="form-label">ID</label>
-                      <input
-                        type="text"
-                        id="IDWithTitle"
-                        class="form-control"
-                        placeholder="Enter ID"
-                        name="class_id"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="btnSClose">
-                    Close
-                  </button>
-                  <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
 
       <!-- Overlay -->
       <div class="layout-overlay layout-menu-toggle"></div>
@@ -499,19 +441,9 @@
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
 
-    <!-- Classes JS -->
-    <script src="js/classes.js"></script>
-
     <!-- Page JS -->
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 </html>
-
-<?php
-  } else {
-    header("Location: ../html/auth-login-basic.php");
-    exit;
-  }
-?>

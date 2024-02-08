@@ -2,7 +2,9 @@
 
     $subject_name     = $_POST['subject_name'];
     $subject_status   = $_POST['subject_status'];
-    echo "$subject_name , $subject_status";
+    $subject_id       = $_POST['subject_id'];
+
+    echo "$subject_name , $subject_status, $subject_id";
 
     if ($subject_name && is_numeric($subject_status)) {
 
@@ -18,10 +20,23 @@
             header("Location: ../subjects.php?error=$em");
             exit;
          }else {
-           $sql  = "INSERT INTO subjects(subject_name, status) VALUES(?, ?)";
-           $stmt = $conn->prepare($sql);
-           $stmt->execute([$subject_name, $subject_status]);
-           $sm = "New subject created successfully";
+            if ($subject_id != '' || $subject_id != null) {
+
+                $sql  = "UPDATE subjects SET subject_name=?, status=?
+                         WHERE stuject_id=?";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([$subject_name, $subject_status, $subject_id]);
+                $sm = "Subject updated successfully";
+
+            } else {
+
+                $sql  = "INSERT INTO subjects(subject_name, status) VALUES(?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([$subject_name, $subject_status]);
+                $sm = "New subject created successfully";
+
+            }
+          
            header("Location: ../subjects.php?error=$sm");
            exit;
          }

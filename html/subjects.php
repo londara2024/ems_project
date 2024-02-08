@@ -3,7 +3,10 @@
 
   if (isset($_SESSION['role']) && $_SESSION['role'] == "Admin") {
 
+    include "connection/connection_db.php";
+    include 'data/subjects.php';
 
+    $ojbSubject = getAllSubject($conn);
 
 ?>
 
@@ -330,7 +333,7 @@
               <div class="row">
                 <div class="col-xl">
                   <div class="card mb-4">
-                    <h5 class="card-header">Light Table head</h5>
+                    <h5 class="card-header">Subject Table</h5>
                     <div class="table-responsive text-nowrap">
                       <table class="table">
                         <thead class="table-light">
@@ -341,9 +344,25 @@
                           </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
+
+                          <?php
+                            $i = 0;
+                            if ($ojbSubject != null) {
+                              foreach ($ojbSubject as $subject) {
+                                $subject_id = $subject['stuject_id'];
+                                $status = $subject['status'];
+                                $subject_name = $subject['subject_name'];
+                          ?>
+
                           <tr>
-                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-                            <td><span class="badge bg-label-primary me-1">Active</span></td>
+                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><?=$subject['subject_name']?></strong></td>
+                            <?php
+                                if ($subject['status'] == 1) {
+                                  echo '<td><span class="badge bg-label-primary me-1">Active</span></td>';
+                                } else {
+                                  echo '<td><span class="badge bg-label-warning me-1">Pending</span></td>';
+                                }
+                              ?>
                             <td>
                               <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -351,6 +370,10 @@
                                 </button>
                                 <div class="dropdown-menu">
                                   <a class="dropdown-item" href="javascript:void(0);"
+                                    data-bs-toggle="modal" data-bs-target="#modalCenter"
+                                    data-id = "<?=$subject_id?>" data-status = "<?=$status?>"
+                                    data-name = "<?=$subject_name?>"
+                                    onclick="fn_update(this)"
                                     ><i class="bx bx-edit-alt me-1"></i> Edit</a
                                   >
                                   <a class="dropdown-item" href="javascript:void(0);"
@@ -360,6 +383,12 @@
                               </div>
                             </td>
                           </tr>
+
+                          <?php     
+                              }
+                            }
+                          ?>
+
                         </tbody>
                       </table>
                     </div>
@@ -387,6 +416,7 @@
           class="btn btn-danger btn-buy-now"
           data-bs-toggle="modal"
           data-bs-target="#modalCenter"
+          id="add_subject"
           >Adding Subject</button>
     </div>
 
@@ -401,6 +431,7 @@
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              id="btnClose"
             ></button>
           </div>
           <form id="formClass" action="req/subjects.php" method="POST">
@@ -429,9 +460,21 @@
                   />
                 </div>
               </div>
+              <div class="row g-2" id="updateId" style="display:none;">
+                <div class="col mb-0">
+                  <label for="emailWithTitle" class="form-label">ID</label>
+                  <input
+                    type="text"
+                    id="IDWithTitle"
+                    class="form-control"
+                    placeholder="Enter ID"
+                    name="subject_id"
+                  />
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <button type="button" id="btnSClose" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                 Close
               </button>
               <button type="submit" class="btn btn-primary">Save</button>
@@ -455,6 +498,9 @@
 
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
+
+    <!-- Classes JS -->
+    <script src="js/subjects.js"></script>
 
     <!-- Page JS -->
 
