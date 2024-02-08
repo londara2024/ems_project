@@ -1,3 +1,13 @@
+<?php
+  session_start();
+
+  if (isset($_SESSION['role']) && $_SESSION['role'] == "Admin") {
+
+    // include "connection/connection_db.php";
+    // include 'data/classes.php';
+    // $ojbClass = getAllClasses($conn);
+?>
+
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -316,97 +326,186 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Student/</span>Student Information/Adding</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Student/</span>Student Information</h4>
               <h5 class="fw-bold py-1 mb-4"> 
                 <a href="students.php" class="btn btn-danger">
                   <span class="tf-icons bx bx-arrow-back"></span>Back
                 </a>
               </h5>
               <!-- Basic Layout -->
+              
               <div class="row">
-                <div class="col-xl">
-                  <div class="card mb-4">
-                    <div class="input-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Recipient's username"
-                          aria-label="Recipient's username"
-                          aria-describedby="button-addon2"
-                        />
-                        <button class="btn btn-outline-primary" type="button" id="button-addon2">Search</button>
+              <div class="col-xxl">
+                <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                      <h5 class="mb-0">Add New Student</h5>
+                      <small class="text-muted float-end">Merged input group</small>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl">
-                  <div class="card mb-4">
-                    <h5 class="card-header">Light Table head</h5>
-                    <div class="table-responsive text-nowrap">
-                      <table class="table">
-                        <thead class="table-light">
-                          <tr>
-                            <th>Class</th>
-                            <th>Subject</th>
-                            <th>Grade</th>
-                            <th>Student</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                          <tr>
-                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-                            <td>Albert Cook</td>
-                            <td>Albert Cook</td>
-                            <td>
-                              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Lilian Fuller"
-                                >
-                                  <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Sophia Wilkerson"
-                                >
-                                  <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Christina Parker"
-                                >
-                                  <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                              </ul>
-                            </td>
-                            <td><span class="badge bg-label-primary me-1">Active</span></td>
-                            <td>
-                              <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                  <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-edit-alt me-1"></i>Adding</a
-                                  >
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <div class="card-body">
+                      <form id="formClass" action="req/students-add.php" method="POST">
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Frist Name</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-fullname" class="input-group-text"
+                                ><i class="bx bx-user"></i
+                              ></span>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="basic-icon-default-fristname"
+                                name="basic-fristname"
+                                placeholder="John"
+                                aria-label="John"
+                                aria-describedby="basic-icon-default-fullname"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Last Name</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-fullname1" class="input-group-text"
+                                ><i class="bx bx-user"></i
+                              ></span>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="basic-icon-default-lastname"
+                                name="basic-lastname"
+                                placeholder="Doe"
+                                aria-label="Doe"
+                                aria-describedby="basic-icon-default-fullname1"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">username</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-fullname3" class="input-group-text"
+                                ><i class="bx bx-user"></i
+                              ></span>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="basic-icon-default-username"
+                                name="basic-username"
+                                placeholder="Doe"
+                                aria-label="Doe"
+                                aria-describedby="basic-icon-default-fullname3"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">password</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-fullname4" class="input-group-text"
+                                ><i class="bx bx-key"></i
+                              ></span>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="basic-icon-default-password"
+                                name="basic-password"
+                                placeholder="Doe"
+                                aria-label="Doe"
+                                aria-describedby="basic-icon-default-fullname4"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-email">Email</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                              <input
+                                type="text"
+                                id="basic-icon-default-email"
+                                name="basic-email"
+                                class="form-control"
+                                placeholder="john.doe"
+                                aria-label="john.doe"
+                                aria-describedby="basic-icon-default-email2"
+                              />
+                              <span id="basic-icon-default-email2" class="input-group-text">@example.com</span>
+                            </div>
+                            <div class="form-text">You can use letters, numbers & periods</div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 form-label" for="basic-icon-default-phone">Phone No</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-phone2" class="input-group-text"
+                                ><i class="bx bx-phone"></i
+                              ></span>
+                              <input
+                                type="text"
+                                id="basic-icon-default-phone"
+                                name="basic-phon"
+                                class="form-control phone-mask"
+                                placeholder="658 799 8941"
+                                aria-label="658 799 8941"
+                                aria-describedby="basic-icon-default-phone2"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 form-label" for="basic-icon-default-phone">Gender</label>
+                          <div class="col-sm-10">
+                              <select class="form-select" id="gerden_selected" name="gerden_selected" aria-label="Default select example">
+                                <option selected value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                              </select>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 form-label" for="basic-icon-default-phone">Class</label>
+                          <div class="col-sm-10">
+                            <select class="form-select" id="class_selected" name="class_selected" aria-label="Default select example">
+                              <option selected>Open this select menu</option>
+                              <option value="CLASS001">CLASS001</option>
+                              <option value="CLASS002">CLASS002</option>
+                              <option value="CLASS003">CLASS003</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 form-label" for="basic-icon-default-phone">Subject</label>
+                          <div class="col-sm-10">
+                            <select class="form-select" id="subject_selected" name="subject_selected" aria-label="Default select example">
+                              <option selected>Open this select menu</option>
+                              <option value="Angular">Angular</option>
+                              <option value="React">React</option>
+                              <option value="VueJs">Three</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 form-label" for="basic-icon-default-phone">Grade</label>
+                          <div class="col-sm-10">
+                            <select class="form-select" id="grade_selected" name="grade_selected" aria-label="Default select example">
+                              <option selected>Open this select menu</option>
+                              <option value="SESSION1">SESSION1</option>
+                              <option value="SESSION2">SESSION2</option>
+                              <option value="SESSION3">SESSION3</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row justify-content-end">
+                          <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Send</button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -447,3 +546,10 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 </html>
+
+<?php
+  } else {
+    header("Location: ../html/auth-login-basic.php");
+    exit;
+  }
+?>
