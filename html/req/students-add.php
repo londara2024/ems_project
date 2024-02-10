@@ -1,32 +1,29 @@
 <?php
 
-    $basic_fristname    = $_POST['basic-fristname'];
-    $basic_lastname     = $_POST['basic-lastname'];
-    $basic_username     = $_POST['basic-username'];
-    $basic_password     = $_POST['basic-password'];
-    $basic_email        = $_POST['basic-email'];
-    $basic_phon         = $_POST['basic-phon'];
-    $gerden_selected    = $_POST['gerden_selected'];
-    $class_selected     = $_POST['class_selected'];
-    $subject_selected   = $_POST['subject_selected'];
-    $grade_selected     = $_POST['grade_selected'];
+    $firstname      = $_POST['firstname'];
+    $lastname       = $_POST['lastname'];
+    $username       = $_POST['username'];
+    $phonenumber    = $_POST['phonenumber'];
+    $password       = $_POST['password'];
+    $email          = $_POST['email'];
+    $roles          = $_POST['roles'];
+    $gender         = $_POST['gender'];
+    $classes        = $_POST['classes'];
+    $subject        = $_POST['subject'];
+    $grade          = $_POST['grade'];
 
 
-    echo "$basic_fristname, $basic_lastname, $basic_username, 
-            $basic_password, $basic_email, $basic_phon, $gerden_selected, 
-            $class_selected, $subject_selected, $grade_selected";
+    echo "$firstname, $lastname, $username, $gender
+            $phonenumber, $password, $email, $roles, 
+            $classes, $subject, $grade";
 
 
 
-    if ($basic_fristname && $basic_lastname && $basic_username && 
-        $basic_password && $basic_email && $basic_phon && $gerden_selected && 
-        $class_selected && $subject_selected && $grade_selected) {
+    if ($firstname && $lastname && $username && 
+        $phonenumber && $password && $email && $roles && 
+        $classes && $subject && $grade) {
 
         include "../connection/connection_db.php";
-        
-       // encode password
-       $password = password_hash($basic_password, PASSWORD_DEFAULT);
-       $roles = "Student";
 
        // check if the user already exists
        $sql_check = "SELECT * FROM users WHERE username = ? AND pwd = ? AND email = ?";
@@ -39,29 +36,32 @@
           exit;
        }else {
 
-         $sql  = "INSERT INTO
+            // encode password
+            $pass = password_hash($password, PASSWORD_DEFAULT);
+
+            // insert into user
+            $sql  = "INSERT INTO
                 users(firstname, lastname, email, username, phone_number, pwd, roles, gender)
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-         $stmt = $conn->prepare($sql);
-         $stmt->execute([$basic_fristname, $basic_lastname, $basic_email, 
-                        $basic_username, $basic_phon, $password, 
-                        $roles, $gerden_selected]);
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$firstname, $lastname, $email, 
+                        $username, $phonenumber, $pass, 
+                        $roles, $gender]);
         
 
-         // insert into student
-         $sql  = "INSERT INTO
+            // insert into student
+            $sqlQuery  = "INSERT INTO
                 student(firstname, lastname, email, username, phone_number, pwd, roles, gender, class, subject, grade)
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-         $stmt = $conn->prepare($sql);
-         $stmt->execute([$basic_fristname, $basic_lastname, $basic_email, 
-                        $basic_username, $basic_phon, $password,
-                        $roles, $gerden_selected, $class_selected, $subject_selected,
-                        $grade_selected]);
+            $stmts = $conn->prepare($sqlQuery);
+            $stmts->execute([$firstname, $lastname, $email, 
+                        $username, $phonenumber, $pass,
+                        $roles, $gender, $classes, $subject,
+                        $grade]);
 
-         $sm = "New users created successfully";
-
-         header("Location: ../students-add.php?success=$sm");
-         exit;
+            $sm = "New users created successfully";
+            header("Location: ../students-add.php?success=$sm");
+            exit;
 
        }
         

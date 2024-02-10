@@ -3,11 +3,18 @@
 
     $email_username = $_POST['email-username'];
     $password = $_POST['password'];
-    echo "Email OR Username [ $email_username ], password [ $password ]";
+    $role = $_POST['role'];
+    echo "Email OR Username [ $email_username ], password [ $password ], role [ $role ]";
 
     if ($email_username && $password) {
 
         include "../connection/connection_db.php";
+        // $table = "";
+        // if ($role == "Admin") {
+            // $table = "users";
+        // } else if ($role == "Student") {
+        //     $table = "student";
+        // }
         
         if (preg_match('/^\S+@\S+\.\S+$/', $email_username)) {
             // when user input email
@@ -21,21 +28,25 @@
 
         if ($stmt->rowCount() == 1) {
 
-            $user   = $stmt->fetch(); // get data form table users
+            $user   = $stmt->fetch();
 
             $uname  = $user['username'];
             $email  = $user['email'];
             $pwd    = $user['pwd'];
             $role   = $user['roles'];
 
-            echo "$uname, $pwd, $email, $role";
+            echo "$uname, $pwd, $email";
 
             if (password_verify($password, $pwd)) {
-                echo " === > Message :: password incorrect";
+                echo " === > Message :: password correct";
                 $_SESSION['role'] = $role;
                 header("Location: ../index.php");
                 exit;
-            }
+            } 
+            // else {
+            //     $em = "password connot verify";
+            //     header("Location: ../auth-login-basic.php?error=$em&$table");
+            // }
 
         } else {
             echo "No Data, [$sql_query]";

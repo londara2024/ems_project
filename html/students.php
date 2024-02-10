@@ -1,3 +1,22 @@
+<?php
+  session_start();
+
+  if (isset($_SESSION['role']) && $_SESSION['role'] == "Admin") {
+
+    include "connection/connection_db.php";
+    include 'data/students.php';
+
+    include 'data/classes.php';
+    include 'data/grades.php';
+    include 'data/subjects.php';
+
+    $ojbClass = getAllStudent($conn);
+
+    $objCls     = getAllClasses($conn);
+    $objGrade   = getAllGrades($conn);
+    $objSubject = getAllSubject($conn);
+?>
+
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -188,7 +207,7 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="auth-login-basic.php" class="menu-link" target="_blank">
+                  <a href="logout.php" class="menu-link" target="_blank">
                     <div data-i18n="Basic">Login</div>
                   </a>
                 </li>
@@ -317,15 +336,83 @@
 
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Student/</span>Student Information</h4>
-              <!-- <h5 class="fw-bold py-1 mb-4"> <button type="button" class="btn btn-primary">
-                              <span class="tf-icons bx bx-arrow-back"></span>&nbsp; Primary
-                            </button></h5> -->
+
               <!-- Basic Layout -->
-             
+              <div class="row">
+              <div class="col-xxl">
+                <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                      <h5 class="mb-0">Search....</h5>
+                    </div>
+                    <div class="card-body">
+                      <form id="formSearch" class="mb-3" action="students-search.php" method="POST">
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Class</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-fullname2" class="input-group-text"
+                                ><i class="bx bx-user"></i
+                              ></span>
+                              <select class="form-select" id="class" name="class" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <?php foreach ($objCls as $classes): ?>
+                                  <option value="<?=strtoupper($classes['class_name'])?>"><?=strtoupper($classes['class_name'])?></option>
+                                <?php endforeach ?>  
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Subject</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-company2" class="input-group-text"
+                                ><i class="bx bx-buildings"></i
+                              ></span>
+                              <select class="form-select" id="subject" name="subject" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <?php foreach ($objSubject as $subject): ?>
+                                  <option value="<?=$subject['subject_name']?>"><?=$subject['subject_name']?></option>
+                                <?php endforeach ?>  
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-email">Grade</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                              <select class="form-select" id="grade" name="grade" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <?php foreach ($objGrade as $grade): ?>
+                                  <option value="<?=strtoupper($grade['grade_name'])?>"><?=strtoupper($grade['grade_name'])?></option>
+                                <?php endforeach ?>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row justify-content-end">
+                          <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <!-- <div class="buy-now">
+                              <a
+                                href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+                                class="btn btn-danger"
+                                >Search</a
+                              >
+                            </div> -->
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="row">
                 <div class="col-xl">
                   <div class="card mb-4">
-                    <h5 class="card-header">Light Table head</h5>
+                    <h5 class="card-header">Student Table</h5>
                     <div class="table-responsive text-nowrap">
                       <table class="table">
                         <thead class="table-light">
@@ -333,64 +420,57 @@
                             <th>Class</th>
                             <th>Subject</th>
                             <th>Grade</th>
-                            <th>Student</th>
-                            <th>Status</th>
+                            <th>StudentName</th>
+                            <th>Gerden</th>
+                            <th>Phone Number</th>
                             <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                          <tr>
-                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-                            <td>Albert Cook</td>
-                            <td>Albert Cook</td>
-                            <td>
-                              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Lilian Fuller"
-                                >
-                                  <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Sophia Wilkerson"
-                                >
-                                  <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li
-                                  data-bs-toggle="tooltip"
-                                  data-popup="tooltip-custom"
-                                  data-bs-placement="top"
-                                  class="avatar avatar-xs pull-up"
-                                  title="Christina Parker"
-                                >
-                                  <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                              </ul>
-                            </td>
-                            <td><span class="badge bg-label-primary me-1">Active</span></td>
-                            <td>
-                              <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                  <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                  >
-                                  <a class="dropdown-item" href="javascript:void(0);"
-                                    ><i class="bx bx-trash me-1"></i> Delete</a
-                                  >
+
+                          <?php
+                              $i = 0;
+                              if ($ojbClass != null) {
+                                foreach ($ojbClass as $student) {
+                                  $id           = $student['id'];
+                                  $fristname    = $student['firstname'];
+                                  $lastname     = $student['lastname'];
+                                  $email        = $student['email'];
+                                  $phon         = $student['phone_number'];
+                                  $gerden       = $student['gender'];
+                                  $class        = $student['class'];
+                                  $subject      = $student['subject'];
+                                  $grade        = $student['grade'];
+                          ?>
+
+                            <tr>
+                              <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><?=$class?></strong></td>
+                              <td></i> <strong><?=$subject?></strong></td>
+                              <td></i> <strong><?=$grade?></strong></td>
+                              <td><?=$fristname?> <?=$lastname?></td>
+                              <td><?=$gerden?></td>
+                              <td><?=$phon?></td>
+                              <td>
+                                <div class="dropdown">
+                                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                  </button>
+                                  <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="javascript:void(0);"
+                                      ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                    >
+                                    <a class="dropdown-item" href="javascript:void(0);"
+                                      ><i class="bx bx-trash me-1"></i> Delete</a
+                                    >
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                          </tr>
+                              </td>
+                            </tr>
+
+                          <?php     
+                              }
+                            }
+                          ?>
                         </tbody>
                       </table>
                     </div>
@@ -441,3 +521,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 </html>
+
+
+<?php
+  } else {
+    header("Location: ../html/auth-login-basic.php");
+    exit;
+  }
+?>

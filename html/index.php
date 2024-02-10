@@ -190,7 +190,7 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="auth-login-basic.php" class="menu-link" target="_blank">
+                  <a href="logout.php" class="menu-link" target="_blank">
                     <div data-i18n="Basic">Login</div>
                   </a>
                 </li>
@@ -290,7 +290,7 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="auth-login-basic.html">
+                      <a class="dropdown-item" href="logout.php">
                         <i class="bx bx-power-off me-2"></i>
                         <span class="align-middle">Log Out</span>
                       </a>

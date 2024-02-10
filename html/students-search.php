@@ -4,13 +4,28 @@
   if (isset($_SESSION['role']) && $_SESSION['role'] == "Admin") {
 
     include "connection/connection_db.php";
+    include 'data/students.php';
+
     include 'data/classes.php';
     include 'data/grades.php';
     include 'data/subjects.php';
 
-    $ojbClass = getAllClasses($conn);
-    $objGrade = getAllGrades($conn);
-    $ojbSubject = getAllSubject($conn);
+    $nclass = $_POST['class'];
+    $nsubject = $_POST['subject'];
+    $ngrade = $_POST['grade'];
+
+    if ($nclass != "Open this select menu" || $nsubject != "Open this select menu" || $ngrade != "Open this select menu") {
+      if ($nclass == "Open this select menu") $nclass = "";
+      if ($nsubject == "Open this select menu") $nsubject = "";
+      if ($ngrade == "Open this select menu") $ngrade = "";
+      $ojbClass = searchStudents($nclass, $nsubject, $ngrade, $conn);
+    } else {
+      $ojbClass = getAllStudent($conn);
+    }
+    
+    $objCls     = getAllClasses($conn);
+    $objGrade   = getAllGrades($conn);
+    $objSubject = getAllSubject($conn);
 ?>
 
 <!DOCTYPE html>
@@ -203,7 +218,7 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="auth-login-basic.php" class="menu-link" target="_blank">
+                  <a href="logout.php" class="menu-link" target="_blank">
                     <div data-i18n="Basic">Login</div>
                   </a>
                 </li>
@@ -332,144 +347,143 @@
 
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Student/</span>Student Information</h4>
-              <h5 class="fw-bold py-1 mb-4"> 
-                <a href="students.php" class="btn btn-danger">
-                  <span class="tf-icons bx bx-arrow-back"></span>Back
-                </a>
-              </h5>
+
               <!-- Basic Layout -->
-              
               <div class="row">
               <div class="col-xxl">
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="mb-0">Add New Student</h5>
-                      <small class="text-muted float-end">Merged input group</small>
+                      <h5 class="mb-0">Search....</h5>
                     </div>
                     <div class="card-body">
-
-                      <form id="formAuthentication" class="mb-3" action="req/students-add.php" method="POST">
-                        <div class="mb-3">
-                          <label for="firstname" class="form-label">First Name</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="firstname"
-                            name="firstname"
-                            placeholder="Enter your First Name"
-                            autofocus
-                          />
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="lastname" class="form-label">Last Name</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="lastname"
-                            name="lastname"
-                            placeholder="Enter your Last Name"
-                            autofocus
-                          />
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="username" class="form-label">Username</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="username"
-                            name="username"
-                            placeholder="Enter your username"
-                            autofocus
-                          />
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="html5-tel-input" class="col-md-2 col-form-label">Phone</label>
-                          <input 
-                            type="tel"
-                            class="form-control" 
-                            id="html5-tel-input"
-                            name="phonenumber"
-                            placeholder="+855-96-188-556"
-                          />
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="email" class="form-label">Email</label>
-                          <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" />
-                        </div>
-                        <div class="mb-3 form-password-toggle">
-                          <label class="form-label" for="password">Password</label>
-                          <div class="input-group input-group-merge">
-                            <input
-                              type="password"
-                              id="password"
-                              class="form-control"
-                              name="password"
-                              placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                              aria-describedby="password"
-                            />
-                            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                      <form id="formSearch" class="mb-3" action="students-search.php" method="POST">
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Class</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-fullname2" class="input-group-text"
+                                ><i class="bx bx-user"></i
+                              ></span>
+                              <select class="form-select" id="class" name="class" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <?php foreach ($objCls as $classes): ?>
+                                  <option value="<?=strtoupper($classes['class_name'])?>"><?=strtoupper($classes['class_name'])?></option>
+                                <?php endforeach ?>  
+                              </select>
+                            </div>
                           </div>
                         </div>
-
-                        <div class="mb-3">
-                          <label for="html5-tel-input" class="col-md-2 col-form-label">Gender</label>
-                          <select class="form-select" id="gender" name="gender" aria-label="Default select example">
-                              <option selected value="male">Male</option>
-                              <option value="female">Female</option>
-                          </select>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Subject</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-company2" class="input-group-text"
+                                ><i class="bx bx-buildings"></i
+                              ></span>
+                              <select class="form-select" id="subject" name="subject" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <?php foreach ($objSubject as $subject): ?>
+                                  <option value="<?=$subject['subject_name']?>"><?=$subject['subject_name']?></option>
+                                <?php endforeach ?>  
+                              </select>
+                            </div>
+                          </div>
                         </div>
-
-                        <div class="mb-3">
-                          <label for="exampleDataList" class="form-label">Roles</label>
-                          <input
-                            class="form-control"
-                            list="datalistOptions"
-                            id="exampleDataList"
-                            placeholder="Type to search..."
-                            name="roles"
-                          />
-                          <datalist id="datalistOptions">
-                            <option value="Admin"></option>
-                            <option value="Teacher"></option>
-                            <option value="Student"></option>
-                          </datalist>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-email">Grade</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                              <select class="form-select" id="grade" name="grade" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <?php foreach ($objGrade as $grade): ?>
+                                  <option value="<?=strtoupper($grade['grade_name'])?>"><?=strtoupper($grade['grade_name'])?></option>
+                                <?php endforeach ?>
+                              </select>
+                            </div>
+                          </div>
                         </div>
-
-                        <div class="mb-3">
-                          <label for="html5-tel-input" class="col-md-2 col-form-label">Class</label>
-                          <select class="form-select" id="classes" name="classes" aria-label="Default select example">
-                            <?php foreach ($ojbClass as $classes): ?>
-                              <option value="<?=strtoupper($classes['class_name'])?>"><?=strtoupper($classes['class_name'])?></option>
-                            <?php endforeach ?>  
-                          </select>
+                        <div class="row justify-content-end">
+                          <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <!-- <div class="buy-now">
+                              <a
+                                href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+                                class="btn btn-danger"
+                                >Search</a
+                              >
+                            </div> -->
+                          </div>
                         </div>
-
-                        <div class="mb-3">
-                          <label for="html5-tel-input" class="col-md-2 col-form-label">Subject</label>
-                          <select class="form-select" id="subject" name="subject" aria-label="Default select example">
-                              <?php foreach ($ojbSubject as $subject): ?>
-                                <option value="<?=$subject['subject_name']?>"><?=$subject['subject_name']?></option>
-                              <?php endforeach ?>  
-                          </select>
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="html5-tel-input" class="col-md-2 col-form-label">Grade</label>
-                          <select class="form-select" id="grade" name="grade" aria-label="Default select example">
-                              <?php foreach ($objGrade as $grade): ?>
-                                <option value="<?=strtoupper($grade['grade_name'])?>"><?=strtoupper($grade['grade_name'])?></option>
-                              <?php endforeach ?>
-                          </select>
-                        </div>
-
-                        <button class="btn btn-primary d-grid w-100">Sign up</button>
                       </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl">
+                  <div class="card mb-4">
+                    <h5 class="card-header">Student Table</h5>
+                    <div class="table-responsive text-nowrap">
+                      <table class="table">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Class</th>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                            <th>StudentName</th>
+                            <th>Gerden</th>
+                            <th>Phone Number</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
 
+                          <?php
+                              $i = 0;
+                              if ($ojbClass != null) {
+                                foreach ($ojbClass as $student) {
+                                  $id           = $student['id'];
+                                  $fristname    = $student['firstname'];
+                                  $lastname     = $student['lastname'];
+                                  $email        = $student['email'];
+                                  $phon         = $student['phone_number'];
+                                  $gerden       = $student['gender'];
+                                  $class        = $student['class'];
+                                  $subject      = $student['subject'];
+                                  $grade        = $student['grade'];
+                          ?>
 
+                            <tr>
+                              <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><?=$class?></strong></td>
+                              <td></i> <strong><?=$subject?></strong></td>
+                              <td></i> <strong><?=$grade?></strong></td>
+                              <td><?=$fristname?> <?=$lastname?></td>
+                              <td><?=$gerden?></td>
+                              <td><?=$phon?></td>
+                              <td>
+                                <div class="dropdown">
+                                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                  </button>
+                                  <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="javascript:void(0);"
+                                      ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                    >
+                                    <a class="dropdown-item" href="javascript:void(0);"
+                                      ><i class="bx bx-trash me-1"></i> Delete</a
+                                    >
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+
+                          <?php     
+                              }
+                            }
+                          ?>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -488,6 +502,14 @@
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
+
+    <div class="buy-now">
+      <a
+        href="students-add.php"
+        class="btn btn-danger btn-buy-now"
+        >Add Student</a
+      >
+    </div>
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
@@ -510,6 +532,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 </html>
+
 
 <?php
   } else {

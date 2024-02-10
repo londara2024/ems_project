@@ -169,6 +169,14 @@
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
                 </div>
+                <!-- <div class="mb-3">
+                  <label for="email" class="form-label">Role</label>
+                  <select class="form-select" id="role" name="role" aria-label="Default select example">
+                      <option selected value="Admin">Admin</option>
+                      <option value="Student">Student</option>
+                      <option value="Teacher">Teacher</option>
+                    </select>
+                </div> -->
                 <div class="mb-3">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="remember-me" />
@@ -182,7 +190,7 @@
 
               <p class="text-center">
                 <span>New on our platform?</span>
-                <a href="auth-register-basic.html">
+                <a href="auth-register-basic.php">
                   <span>Create an account</span>
                 </a>
               </p>

@@ -331,7 +331,7 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Student/</span>Student Information</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Teacher/</span>Teacher Information</h4>
               <h5 class="fw-bold py-1 mb-4"> 
                 <a href="students.php" class="btn btn-danger">
                   <span class="tf-icons bx bx-arrow-back"></span>Back
@@ -464,6 +464,24 @@
                                 <option value="<?=strtoupper($grade['grade_name'])?>"><?=strtoupper($grade['grade_name'])?></option>
                               <?php endforeach ?>
                           </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="html5-tel-input" class="col-md-2 col-form-label">Datetime</label>
+                          <!-- <input 
+                            type="tel"
+                            class="form-control" 
+                            id="html5-tel-input"
+                            name="phonenumber"
+                            placeholder="+855-96-188-556"
+                          /> -->
+                          <input
+                            class="form-control"
+                            type="datetime-local"
+                            value="2024-01-18T12:30:00"
+                            name="phonenumber"
+                            id="html5-datetime-local-input"
+                          />
                         </div>
 
                         <button class="btn btn-primary d-grid w-100">Sign up</button>
